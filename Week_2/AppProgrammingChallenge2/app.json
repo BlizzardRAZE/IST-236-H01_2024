@@ -1,7 +1,7 @@
 {
   "expo": {
-    "name": "BusinessCard",
-    "slug": "BusinessCard",
+    "name": "AppProgrammingChallenge2",
+    "slug": "AppProgrammingChallenge2",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
