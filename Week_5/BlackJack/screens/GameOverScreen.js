@@ -60,7 +60,7 @@ function GameOverScreen(props) {
 
 export default GameOverScreen;
 
-styles = StyleSheet.create({
+const styles = StyleSheet.create({
   rootContainer: {
     flex: 1,
   },

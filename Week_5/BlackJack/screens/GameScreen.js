@@ -55,7 +55,7 @@ function GameScreen(props) {
 
 export default GameScreen;
 
-styles = StyleSheet.create({
+const styles = StyleSheet.create({
   rootContainer: {
     flex: 1,
   },

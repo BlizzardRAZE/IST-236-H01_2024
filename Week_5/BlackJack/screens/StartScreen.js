@@ -39,7 +39,7 @@ function StartGameScreen(props) {
 
 export default StartGameScreen;
 
-styles = StyleSheet.create({
+const styles = StyleSheet.create({
   rootContainer: {
     flex: 1,
   },
