@@ -1,4 +1,4 @@
-import { View, StyleSheet, Image } from "react-native";
+import { View, StyleSheet, Image, useWindowDimensions } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Title from "../components/Title";
 import NavButton from "../components/NavButton";
@@ -8,6 +8,9 @@ import Colors from "../constants/colors";
 function StartGameScreen(props) {
   // Set Safe Area Screen Boundaries
   const insets = useSafeAreaInsets();
+
+  // Find the device window dimensions
+  const { width, height } = useWindowDimensions();
 
   return (
     <LinearGradient
@@ -22,21 +25,23 @@ function StartGameScreen(props) {
             paddingBottom: insets.bottom,
             paddingLeft: insets.left,
             paddingRight: insets.right,
+            height: height,
+            width: width,
           },
         ]}
       >
-        <View style={styles.titleContainer}>
+        <View style={[styles.titleContainer, {height: height * 0.15}]}>
           <Title>BlackJack 21</Title>
         </View>
 
-        <View style={styles.imageContainer}>
+        <View style={[styles.imageContainer, {height: height * 0.5}]}>
           <Image
             source={require("../assets/images/blackjackbg.png")}
             style={styles.image}
           />
         </View>
 
-        <View style={styles.buttonContainer}>
+        <View style={[styles.buttonContainer, {height: height * 0.15}]}>
           <NavButton onPress={props.onNext}>Play Now!</NavButton>
         </View>
       </View>
@@ -51,22 +56,19 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   titleContainer: {
-    flex: 1,
     justifyContent: "center",
     alignItems: "center",
     marginVertical: 20,
   },
   imageContainer: {
-    flex: 5,
     justifyContent: "center",
     alignItems: "center",
   },
   image: {
-    width: 400,
+    height: "100%",
     resizeMode: "contain",
   },
   buttonContainer: {
-    flex: 1,
     justifyContent: "center",
     alignItems: "center",
   },

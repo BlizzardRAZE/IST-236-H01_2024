@@ -1,4 +1,4 @@
-import { View, StyleSheet, Text } from "react-native";
+import { View, StyleSheet, Text, useWindowDimensions } from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import Title from "../components/Title";
 import NavButton from "../components/NavButton";
@@ -13,26 +13,69 @@ function GameOverScreen(props) {
   const playerScore = props.user;
   const computerScore = props.computer;
 
-  let titleText = <Title>It's a Tie</Title>;
+  let titleText = <Header>It's a Tie</Header>;
 
   if (
     (playerScore <= 21 && playerScore > computerScore) ||
     (playerScore <= 21 && computerScore > 21)
   ) {
-    titleText = <Title>Player Wins!</Title>;
+    titleText = <Header>Player Wins!</Header>;
   }
   if (
     (computerScore <= 21 && computerScore > playerScore) ||
     (computerScore <= 21 && playerScore > 21)
   ) {
-    titleText = <Title>Computer Wins!</Title>;
+    titleText = <Header>Computer Wins!</Header>;
   }
 
-  return (
-    <LinearGradient
-      colors={[Colors.accent200, Colors.accent800, Colors.accent200]}
-      style={styles.rootContainer}
+  // Find the device window dimensions
+  const { width, height } = useWindowDimensions();
+
+  // If in portrait mode, base size on screen width
+  let size = width * 0.2;
+  // If in landscape mode, base size on screen height
+  if (width > height) {
+    size = height * 0.12;
+  }
+
+  let content = (
+    <View
+      style={[
+        styles.rootContainer,
+        {
+          paddingTop: insets.top,
+          paddingBottom: insets.bottom,
+          paddingLeft: insets.left,
+          paddingRight: insets.right,
+          width: width,
+          height: height,
+        },
+      ]}
     >
+      <View style={styles.titleContainer}>{titleText}</View>
+
+      <View style={[styles.scoreContainer, { height: height * 0.25 }]}>
+        <Header>Computer Score:</Header>
+        <Text style={[styles.scoreText, { fontSize: size }]}>
+          {computerScore}
+        </Text>
+      </View>
+
+      <View style={[styles.scoreContainer, { height: height * 0.25 }]}>
+        <Header>Player Score:</Header>
+        <Text style={[styles.scoreText, { fontSize: size }]}>
+          {playerScore}
+        </Text>
+      </View>
+
+      <View style={[styles.buttonContainer, { height: height * 0.25 }]}>
+        <NavButton onPress={props.onNext}>Play Now!</NavButton>
+      </View>
+    </View>
+  );
+
+  if (width > height) {
+    content = (
       <View
         style={[
           styles.rootContainer,
@@ -41,25 +84,41 @@ function GameOverScreen(props) {
             paddingBottom: insets.bottom,
             paddingLeft: insets.left,
             paddingRight: insets.right,
+            width: width,
+            height: height,
           },
         ]}
       >
         <View style={styles.titleContainer}>{titleText}</View>
 
-        <View style={styles.scoreContainer}>
-          <Header>Computer Score:</Header>
-          <Text style={styles.scoreText}>{computerScore}</Text>
-        </View>
+        <View style={styles.rowContainer}>
+          <View style={[styles.scoreContainer, { height: height * 0.3 }]}>
+            <Header>Computer Score:</Header>
+            <Text style={[styles.scoreText, { fontSize: size }]}>
+              {computerScore}
+            </Text>
+          </View>
 
-        <View style={styles.scoreContainer}>
-          <Header>Player Score:</Header>
-          <Text style={styles.scoreText}>{playerScore}</Text>
+          <View style={[styles.scoreContainer, { height: height * 0.3 }]}>
+            <Header>Player Score:</Header>
+            <Text style={[styles.scoreText, { fontSize: size }]}>
+              {playerScore}
+            </Text>
+          </View>
         </View>
-
-        <View style={styles.buttonContainer}>
+        <View style={[styles.buttonContainer, { height: height * 0.25 }]}>
           <NavButton onPress={props.onNext}>Play Now!</NavButton>
         </View>
       </View>
+    );
+  }
+
+  return (
+    <LinearGradient
+      colors={[Colors.accent200, Colors.accent800, Colors.accent200]}
+      style={styles.rootContainer}
+    >
+      {content}
     </LinearGradient>
   );
 }
@@ -77,17 +136,20 @@ const styles = StyleSheet.create({
     marginVertical: 20,
   },
   scoreContainer: {
-    flex: 3,
     justifyContent: "center",
     alignItems: "center",
   },
   scoreText: {
-    fontSize: 50,
     color: Colors.primary500,
   },
   buttonContainer: {
-    flex: 1,
     justifyContent: "center",
     alignItems: "center",
+  },
+  rowContainer: {
+    flex: 1,
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-evenly",
   },
 });

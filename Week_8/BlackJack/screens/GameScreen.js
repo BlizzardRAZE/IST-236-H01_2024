@@ -1,4 +1,10 @@
-import { View, StyleSheet, Image, ImageBackground } from "react-native";
+import {
+  View,
+  StyleSheet,
+  Image,
+  ImageBackground,
+  useWindowDimensions,
+} from "react-native";
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import NavButton from "../components/NavButton";
 import Header from "../components/header";
@@ -254,13 +260,76 @@ function GameScreen(props) {
     }
   }, [userFinished, computerScore]);
 
-  return (
-    <ImageBackground
-      source={require("../assets/images/blackjack_felt.jpg")}
-      resize="cover"
-      style={styles.rootContainer}
-      imageStyle={styles.backgroundImage}
+  // Find the device window dimensions
+  const { width, height } = useWindowDimensions();
+
+  let content = (
+    <View
+      style={[
+        styles.rootContainer,
+        {
+          paddingTop: insets.top,
+          paddingBottom: insets.bottom,
+          paddingLeft: insets.left,
+          paddingRight: insets.right,
+        },
+      ]}
     >
+      <View style={[styles.headerContainer, { height: height * 0.15 }]}>
+        <Header>Computer's Hand</Header>
+      </View>
+
+      <View style={styles.computerImageContainer}>
+        <Image
+          style={[styles.computerImage, { width: width * 0.25 }]}
+          source={require("../assets/images/cardback1.png")}
+        />
+        <View style={{ marginLeft: -15 }}>
+          <Image
+            style={[styles.computerImage, { width: width * 0.25 }]}
+            source={
+              computerHand.length === 0
+                ? require("../assets/images/cardback1.png")
+                : Cards[computerHand[1]].picture
+            }
+          />
+        </View>
+      </View>
+
+      <View style={[styles.headerContainer, { height: height * 0.15 }]}>
+        <Header>Players's Hand</Header>
+      </View>
+
+      <View style={styles.playerImageContainer}>
+        {userHand.map((index) => {
+          return (
+            <View key={index} style={[{ marginLeft: -10 * (numUserHand + 1) }]}>
+              <Image
+                style={[styles.playerImage, { width: width * 0.25 }]}
+                source={
+                  userHand.length === 0
+                    ? require("../assets/images/cardback1.png")
+                    : Cards[index].picture
+                }
+              />
+            </View>
+          );
+        })}
+      </View>
+
+      <View style={[styles.buttonsContainer, { height: height * 0.25 }]}>
+        <NavButton style={styles.button} onPress={drawUserCardHandler}>
+          Hit Me!
+        </NavButton>
+        <NavButton style={styles.button} onPress={stayHandler}>
+          Stay!
+        </NavButton>
+      </View>
+    </View>
+  );
+
+  if (width > height) {
+    content = (
       <View
         style={[
           styles.rootContainer,
@@ -272,59 +341,76 @@ function GameScreen(props) {
           },
         ]}
       >
-        <View style={styles.headerContainer}>
-          <Header>Computer's Hand</Header>
-        </View>
+        <View style={styles.rowContainer}>
+          <View style={styles.innerRowContainer}>
+            <View style={[styles.headerContainer, { height: height * 0.15 }]}>
+              <Header>Computer's Hand</Header>
+            </View>
 
-        <View style={styles.computerImageContainer}>
-          <Image
-            style={styles.computerImage}
-            source={require("../assets/images/cardback1.png")}
-          />
-          <View style={{marginLeft: -10} }>
-            <Image
-              style={styles.computerImage}
-              source={
-                computerHand.length === 0
-                  ? require("../assets/images/cardback1.png")
-                  : Cards[computerHand[1]].picture
-              }
-            />
-          </View>
-        </View>
-
-        <View style={styles.headerContainer}>
-          <Header>Players's Hand</Header>
-        </View>
-
-        <View style={styles.playerImageContainer}>
-          {userHand.map((index) => {
-            return (
+            <View style={styles.computerImageContainer}>
               <Image
-                style={[
-                  styles.playerImage,
-                  { marginLeft: -10 * (numUserHand + 1) },
-                ]}
-                key={index}
-                source={
-                  userHand.length === 0
-                    ? require("../assets/images/cardback1.png")
-                    : Cards[index].picture
-                }
+                style={[styles.computerImage, { width: width * 0.15 }]}
+                source={require("../assets/images/cardback1.png")}
               />
-            );
-          })}
+              <View style={{ marginLeft: -15 }}>
+                <Image
+                  style={[styles.computerImage, { width: width * 0.15 }]}
+                  source={
+                    computerHand.length === 0
+                      ? require("../assets/images/cardback1.png")
+                      : Cards[computerHand[1]].picture
+                  }
+                />
+              </View>
+            </View>
+          </View>
+          <View style={styles.innerRowContainer}>
+            <View style={[styles.headerContainer, { height: height * 0.15 }]}>
+              <Header>Players's Hand</Header>
+            </View>
+
+            <View style={styles.playerImageContainer}>
+              {userHand.map((index) => {
+                return (
+                  <View
+                    key={index}
+                    style={[{ marginLeft: -10 * (numUserHand + 1) }]}
+                  >
+                    <Image
+                      style={[styles.playerImage, { width: width * 0.15 }]}
+                      source={
+                        userHand.length === 0
+                          ? require("../assets/images/cardback1.png")
+                          : Cards[index].picture
+                      }
+                    />
+                  </View>
+                );
+              })}
+            </View>
+          </View>
         </View>
 
-        <View style={styles.buttonsContainer}>
-          <View style={styles.buttonContainer}>
-            <NavButton onPress={drawUserCardHandler}>Hit Me!</NavButton>
-          </View>
-          <View style={styles.buttonContainer}>
-            <NavButton onPress={stayHandler}>Stay!</NavButton>
-          </View>
+        <View style={[styles.buttonsContainer, { height: height * 0.25 }]}>
+          <NavButton style={styles.button} onPress={drawUserCardHandler}>
+            Hit Me!
+          </NavButton>
+          <NavButton style={styles.button} onPress={stayHandler}>
+            Stay!
+          </NavButton>
         </View>
       </View>
+    );
+  }
+
+  return (
+    <ImageBackground
+      source={require("../assets/images/blackjack_felt.jpg")}
+      resize="cover"
+      style={styles.rootContainer}
+      imageStyle={styles.backgroundImage}
+    >
+      {content}
     </ImageBackground>
   );
 }
@@ -339,7 +425,6 @@ const styles = StyleSheet.create({
     opacity: 0.3,
   },
   headerContainer: {
-    flex: 1,
     justifyContent: "center",
     alignItems: "center",
   },
@@ -350,8 +435,6 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   computerImage: {
-    height: 150,
-    width: 100,
     resizeMode: "contain",
   },
   playerImageContainer: {
@@ -361,21 +444,20 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   playerImage: {
-    height: 150,
-    width: 100,
     resizeMode: "contain",
   },
   buttonsContainer: {
-    flex: 1,
     flexDirection: "row",
-    justifyContent: "center",
+    justifyContent: "space-evenly",
     alignItems: "center",
   },
-  buttonContainer: {
-    flex: 1,
-    height: "100%",
-    justifyContent: "center",
-    marginHorizontal: 10,
-    marginBottom: 25,
+  rowContainer:{
+    flexDirection:'row',
+    justifyContent:'space-evenly',
+    alignItems:'center',
+    flex:1,
+  },
+  innerRowContainer:{
+    flex:1,
   },
 });
