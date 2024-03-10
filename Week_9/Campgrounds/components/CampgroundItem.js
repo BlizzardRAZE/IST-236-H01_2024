@@ -46,6 +46,10 @@ function CampgroundItem(props) {
 
       <ImageViewModal
         isVisible={modalIsVisible}
+        name={props.name}
+        numSites={props.numSites}
+        foundedYear={props.foundedYear}
+        rating={props.rating}
         imageUrl={props.imageUrl}
         onClose={closeImageHandler}
       />
