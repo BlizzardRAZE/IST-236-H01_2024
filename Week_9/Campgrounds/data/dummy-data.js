@@ -2,7 +2,7 @@ import State from "../models/states";
 import Campground from "../models/campgrounds";
 
 export const STATES = [
-  new State("s1", "Alabama", "#f44336"), // Red
+  new State("s1", "Alabama", "#f44336",), // Red
   new State("s2", "Florida", "#2196f3"), // Blue
   new State("s3", "Georgia", "#4caf50"), // Green
   new State("s4", "Kentucky", "#ff9800"), // Orange
