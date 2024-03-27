@@ -1,26 +1,30 @@
-import { useFonts } from 'expo-font';
-import { StatusBar } from 'expo-status-bar';
-import { useCallback } from 'react';
-import { StyleSheet } from 'react-native';
-import * as SplashScreen from 'expo-splash-screen'
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { createDrawerNavigator } from '@react-navigation/drawer';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import Colors from './constants/Colors';
-import BookmarksScreen from './screens/BookmarksScreen';
-import USNewsScreen from './screens/USNewsScreen';
-import WorldNewsScreen from './screens/WorldNewsScreen';
-import GameNewsScreen from './screens/GameNewsScreen';
-import NewsDetailScreen from './screens/NewsDetailScreen';
-import { Fontisto, FontAwesome, FontAwesome6, Ionicons} from '@expo/vector-icons';
-import { NavigationContainer } from '@react-navigation/native';
-
+import { useFonts } from "expo-font";
+import { StatusBar } from "expo-status-bar";
+import { useCallback } from "react";
+import { StyleSheet } from "react-native";
+import * as SplashScreen from "expo-splash-screen";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { createDrawerNavigator } from "@react-navigation/drawer";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import Colors from "./constants/Colors";
+import BookmarksScreen from "./screens/BookmarksScreen";
+import USNewsScreen from "./screens/USNewsScreen";
+import WorldNewsScreen from "./screens/WorldNewsScreen";
+import GameNewsScreen from "./screens/GameNewsScreen";
+import NewsDetailScreen from "./screens/NewsDetailScreen";
+import {
+  Fontisto,
+  FontAwesome,
+  FontAwesome6,
+  Ionicons,
+} from "@expo/vector-icons";
+import { NavigationContainer } from "@react-navigation/native";
+import BookmarkContextProvider from "./store/context/bookmarks-context";
 
 // Get the native stack, drawer, and tabs navigator
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
 const Tabs = createBottomTabNavigator();
-
 
 // Function to build Drawer Navigator
 function DrawerNavigator() {
@@ -70,7 +74,6 @@ function DrawerNavigator() {
     </Drawer.Navigator>
   );
 }
-
 
 // Function to build Tab Navigator
 function TabsNavigator() {
@@ -139,7 +142,6 @@ export default function App() {
     dailymirror: require("./assets/fonts/Dailymirror.ttf"),
     noticia: require("./assets/fonts/NoticiaText-Regular.ttf"),
     noticiaBold: require("./assets/fonts/NoticiaText-Bold.ttf"),
-    
   });
 
   // Wait and load all of the fonts for application
@@ -159,37 +161,40 @@ export default function App() {
       <>
         {/* Show status bar */}
         <StatusBar style="light" />
-        {/* Create Navigation Container */}
-        <NavigationContainer style={styles.container}>
-          {/* Utilize Stack to make a Navigator and Screen */}
-          <Stack.Navigator
-            // Set default screen to DrawerScreen
-            initialRouteName="DrawerScreen"
-            // Configure screen options in DrawerScreen
-            screenOptions={{
-              headerTintColor: Colors.primary500,
-              headerStyle: { backgroundColor: Colors.secondary800 },
-              contentStyle: { backgroundColor: Colors.primary800},
-            }}
-          >
-            {/* Create Drawer Screen for Drawer Navigator */}
-            <Stack.Screen
-              name="DrawerScreen"
-              component={DrawerNavigator}
-              options={{
-                headerShown: false,
+        {/* Create Bookmark Context Provider so it can access screens to allow user to bookmark screens*/}
+        <BookmarkContextProvider>
+          {/* Create Navigation Container */}
+          <NavigationContainer style={styles.container}>
+            {/* Utilize Stack to make a Navigator and Screen */}
+            <Stack.Navigator
+              // Set default screen to DrawerScreen
+              initialRouteName="DrawerScreen"
+              // Configure screen options in DrawerScreen
+              screenOptions={{
+                headerTintColor: Colors.primary500,
+                headerStyle: { backgroundColor: Colors.secondary800 },
+                contentStyle: { backgroundColor: Colors.primary800 },
               }}
-            />
-            {/* Create News Detail Screen */}
-            <Stack.Screen
-              name="NewsDetail"
-              component={NewsDetailScreen}
-              options={{
-                headerBackTitle: false,
-              }}
-            />
-          </Stack.Navigator>
-        </NavigationContainer>
+            >
+              {/* Create Drawer Screen for Drawer Navigator */}
+              <Stack.Screen
+                name="DrawerScreen"
+                component={DrawerNavigator}
+                options={{
+                  headerShown: false,
+                }}
+              />
+              {/* Create News Detail Screen */}
+              <Stack.Screen
+                name="NewsDetail"
+                component={NewsDetailScreen}
+                options={{
+                  headerBackTitle: false,
+                }}
+              />
+            </Stack.Navigator>
+          </NavigationContainer>
+        </BookmarkContextProvider>
       </>
     );
   }
@@ -198,8 +203,8 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
+    backgroundColor: "#fff",
+    alignItems: "center",
+    justifyContent: "center",
   },
 });

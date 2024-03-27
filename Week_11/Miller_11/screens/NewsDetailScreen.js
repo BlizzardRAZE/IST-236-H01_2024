@@ -1,21 +1,32 @@
 import { Text, StyleSheet, View, Image, ScrollView } from "react-native";
 import { NEWSARTICLES } from "../data/dummy-data";
-import { useLayoutEffect, useState } from "react";
+import { useContext, useLayoutEffect, useState } from "react";
 import BookmarkButton from "../components/BookmarkButton";
+import { BookmarksContext } from "../store/context/bookmarks-context";
 
 // Function to show the NewsDetailScreen
 function NewsDetailScreen(props) {
+  // Get and use the Context from BookmarkContext
+  const bookmarkedArticlesCtx = useContext(BookmarksContext)
+
   // Get NewsId from param
   const NewsId = props.route.params.NewsId;
   // Find the selected Article by searching the NewsId
   const selectedArticle = NEWSARTICLES.find((article) => article.id === NewsId);
 
-  // Set the state of pressed to false
-  const [pressed, setPressed] = useState(false);
+  // Get id from Article and apply it to the bookmarkedArticlesCtx Context id
+  // So it can add/remove the article 
+  articleIsBookmarked = bookmarkedArticlesCtx.ids.includes(NewsId)
 
-  // Function to handle if the bookmark has been pressed
-  function headerButtonPressHandler() {
-    setPressed(!pressed);
+  // Function to update the icon to show if the article it's been saved or removed
+  function changeBookmarkStatusHandler(){
+    // If the article is already bookmarked remove it 
+    if (articleIsBookmarked) {
+      bookmarkedArticlesCtx.removeFavoriteArticle(NewsId)
+    } else {
+      // Otherwise, Add the article
+      bookmarkedArticlesCtx.addFavoriteArticle(NewsId)
+    }
   }
 
   // Update the icon for the bookmark (Filled/Border) when pressed
@@ -26,13 +37,13 @@ function NewsDetailScreen(props) {
         return (
           // Show the bookmark button and update when pressed
           <BookmarkButton
-            pressed={pressed}
-            onPress={headerButtonPressHandler}
+            pressed={articleIsBookmarked}
+            onPress={changeBookmarkStatusHandler}
           />
         );
       },
     });
-  }, [props.navigation, headerButtonPressHandler]);
+  }, [props.navigation, changeBookmarkStatusHandler]);
 
   return (
     // Create View for Root Container
