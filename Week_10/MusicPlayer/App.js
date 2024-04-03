@@ -8,9 +8,58 @@ import Colors from './constants/Colors'
 import { NavigationContainer } from '@react-navigation/native';
 import GenresScreen from './screens/GenresScreen';
 import SongsOverviewScreen from './screens/SongsOverviewScreen';
+import { createDrawerNavigator } from '@react-navigation/drawer';
+import { Entypo } from "@expo/vector-icons" 
+import FavoritesScreen from './screens/FavoritesScreen';
+import SongDetailScreen from './screens/SongDetailScreen';
 
 const Stack = createNativeStackNavigator();
+const Drawer = createDrawerNavigator();
 
+function DrawerNavigator(){
+  return(
+    <Drawer.Navigator
+      initialRouteName='SongGenres'
+      screenOptions={{
+        headerStyle : {backgroundColor: Colors.primary500},
+        headerTintColor: "white",
+        headerTitleStyle: {
+          fontFamily: "house",
+          fontSize:40,
+          color:Colors.accent800,
+        },
+        sceneContainerStyle:{backgroundColor: Colors.primary800},
+        drawerContentStyle:{ backgroundColor: Colors.primary500},
+        drawerInactiveTintColor: Colors.primary300,
+        drawerActiveTintColor: Colors.accent500,
+        drawerActiveBackgroundColor: Colors.primary800
+      }}
+    >
+      <Drawer.Screen
+        name='SongGenres'
+        component={GenresScreen}
+        options={{
+          title:"Genres",
+          drawerLabel: "Music Genres",
+          drawerIcon:({color, size}) => (
+            <Entypo name='list' color={color} size={size}/>
+          )
+        }}
+      />
+      <Drawer.Screen
+        name='FavoriteSongs'
+        component={FavoritesScreen}
+        options={{
+          title:"Favorites",
+          drawerLabel: "My Favorites",
+          drawerIcon:({color, size}) => (
+            <Entypo name='star' color={color} size={size}/>
+          )
+        }}
+      />
+    </Drawer.Navigator>
+  )
+}
 
 export default function App() {
 
@@ -54,18 +103,22 @@ export default function App() {
               contentStyle:{backgroundColor: Colors.primary800},
             }}
           >
-            {/* Create Song Genres Screen */}
             <Stack.Screen
-            name="SongGenres"
-            component={GenresScreen}
+            name="DrawerScreen"
+            component={DrawerNavigator}
             options={{
-              title:"Music Genres"
+              headerShown: false,
             }}
             />
             {/* Create Song Overview Screen */}
             <Stack.Screen
             name="SongsOverview"
             component={SongsOverviewScreen}
+            />
+            {/* Create Song Detail Screen */}
+            <Stack.Screen
+            name="SongDetail"
+            component={SongDetailScreen}
             />
           </Stack.Navigator>
           

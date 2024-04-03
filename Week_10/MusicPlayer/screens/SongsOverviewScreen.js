@@ -20,6 +20,7 @@ function SongsOverviewScreen(props){
 
     function renderSongItem(itemData) {
         const songItemProps = {
+            id: itemData.item.id,
             title : itemData.item.title,
             imageUrl : itemData.item.imageUrl,
             artist : itemData.item.artist,
