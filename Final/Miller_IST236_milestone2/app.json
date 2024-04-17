@@ -1,0 +1,30 @@
+{
+  "expo": {
+    "name": "Miller_IST236_FinalProject",
+    "slug": "Miller_IST236_FinalProject",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./assets/images/AppIcon.png",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/images/SplashScreen.jpg",
+      "resizeMode": "cover",
+      "backgroundColor": "#ffffff"
+    },
+    "assetBundlePatterns": [
+      "**/*"
+    ],
+    "ios": {
+      "supportsTablet": true
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/adaptive-icon.png",
+        "backgroundColor": "#ffffff"
+      }
+    },
+    "web": {
+      "favicon": "./assets/favicon.png"
+    }
+  }
+}
