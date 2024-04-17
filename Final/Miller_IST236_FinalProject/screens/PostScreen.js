@@ -4,9 +4,7 @@ import PostList from "../components/PostList";
 import GlobalColors from "../constants/styles";
 
 // Function to show the PostScreen
-function PostScreen(props) {
-  // Update Header to say VFW Posts
-
+function PostScreen() {
   // Get information from data
   const vfwPostData = POSTS;
 
