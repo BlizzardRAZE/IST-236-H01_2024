@@ -8,7 +8,6 @@ import {
 } from "react-native";
 import RadioButtonsGroup from "react-native-radio-buttons-group";
 import BouncyCheckbox from "react-native-bouncy-checkbox";
-import { PRODUCTS } from "../data/Product-Data";
 import { useMemo, useState } from "react";
 import GlobalColors from "../constants/styles";
 import Button from "../components/Button";
@@ -16,14 +15,19 @@ import PurchaseModalScreen from "../model/PurchaseModelScreen";
 
 // Function to show the StoreScreen
 function StoreScreen() {
-  // Get information from data
-  const productData = PRODUCTS;
 
   // Set the state variable for current price. Start at 0
   const [currentPrice, setCurrentPrice] = useState(0);
 
   // Create array holding the product information.
-  const [products, setProducts] = useState(productData);
+  const [products, setProducts] = useState([
+    {id: 1, productName:"Army Logo Playing Cards", productPrice: 1.99, productImageURL:"https://vfwstoreproducts.azureedge.net/images/supply/1380-L.gif", productChecked: false},
+    {id: 2, productName:"US/ARMY Flag Pin", productPrice: 3.50, productImageURL:"https://vfwstoreproducts.azureedge.net/images/supply/1604-L.gif", productChecked: false},
+    {id: 3, productName:"7 Emblem Set", productPrice: 2800.00, productImageURL:"https://vfwstoreproducts.azureedge.net/images/supply/3409-L.gif", productChecked: false},
+    {id: 4, productName:"Denim Patriotic Apron", productPrice: 19.95, productImageURL:"https://vfwstoreproducts.azureedge.net/images/supply/7239-L.gif", productChecked: false},
+    {id: 5, productName:"Patriotic Eagle USA Cap", productPrice: 24.95, productImageURL:"https://vfwstoreproducts.azureedge.net/images/supply/7124-L.gif", productChecked: false},
+
+  ]);
 
   // Set the state variable for the donation id
   const [donationId, setDonationId] = useState(0);
@@ -42,6 +46,7 @@ function StoreScreen() {
   function closeModalHandler() {
     setCurrentPrice(0);
     setDonationId(0);
+    unSetProductsHandler();
     setModalIsVisible(false);
   }
 
@@ -55,6 +60,15 @@ function StoreScreen() {
           : product
       )
     );
+  }
+
+  // Function to uncheck boxes
+  function unSetProductsHandler() {
+    for (let i = 0; i < products.length; i++) {
+      if (products[i].productChecked) {
+        products[i].productChecked = false;
+      }
+    }
   }
 
   // Create array holding the different times when selecting a donation
@@ -128,7 +142,7 @@ function StoreScreen() {
 
             {/* Create View for Checkboxes */}
             <View style={styles.checkBoxSubContainer}>
-              {productData.map((product) => {
+              {products.map((product) => {
                 return (
                   <View style={styles.productContainer}>
                     <View style={styles.imageContainer}>
@@ -154,6 +168,7 @@ function StoreScreen() {
                     <BouncyCheckbox
                       key={product.id}
                       onPress={setProductsHandler.bind(this, product.id)}
+                      isChecked={product.productChecked}
                       innerIconStyle={{
                         color: GlobalColors.primary200,
                         borderRadius: 0,
@@ -267,7 +282,6 @@ const styles = StyleSheet.create({
     alignSelf: "center",
     backgroundColor: GlobalColors.primary200,
     borderColor: GlobalColors.accent500,
-    justifyContent: "center",
     alignItems: "center",
     marginVertical: 20,
     paddingHorizontal: 10,
@@ -281,6 +295,8 @@ const styles = StyleSheet.create({
     color: "white",
   },
   radioGroup: {
+    textAlignVertical:'center',
+    alignSelf:'center',
     paddingBottom: 5,
   },
   radioGroupLabels: {
@@ -290,5 +306,6 @@ const styles = StyleSheet.create({
   buttonContainer: {
     width: "75%",
     alignSelf: "center",
+    marginBottom:35,
   },
 });
