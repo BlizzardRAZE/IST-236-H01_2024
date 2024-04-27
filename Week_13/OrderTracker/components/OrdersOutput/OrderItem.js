@@ -2,6 +2,7 @@ import { Pressable, StyleSheet, Text, View } from "react-native";
 import { GlobalStyles } from "../../constants/styles";
 import { getFormattedDate } from "../../util/date";
 import { useNavigation } from "@react-navigation/native";
+import { getNumberString } from "../../util/string";
 
 function OrderItem(props) {
   const navigation = useNavigation();
@@ -20,7 +21,7 @@ function OrderItem(props) {
       <View style={styles.orderItem}>
         <View style={styles.infoContainer}>
           <View style={styles.rowContainer}>
-            <Text style={[styles.text, styles.description]}>Order {props.id}</Text>
+            <Text style={[styles.text, styles.description]}>Order #{getNumberString(props.id)}</Text>
             <Text style={[styles.text, styles.description]}>
               {getFormattedDate(props.date)}
             </Text>

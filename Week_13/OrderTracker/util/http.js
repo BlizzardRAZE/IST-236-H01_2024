@@ -1,7 +1,6 @@
 import axios from "axios";
-import { BackHandler } from "react-native";
 
-const BACKEND_URL = "https://ist-236-20ab4-default-rtdb.firebaseio.com";
+const BACKEND_URL = "Nuh uh!";
 
 export async function storeOrder(orderData) {
   const response = await axios.post(BACKEND_URL + "/orders.json", orderData);
@@ -22,8 +21,10 @@ export async function fetchOrders() {
       description: response.data[key].description,
       status: response.data[key].status,
     };
-    orders.push(orderObj)
+    orders.push(orderObj);
   }
+
+  return orders;
 }
 
 export function updateOrder(id, orderData) {

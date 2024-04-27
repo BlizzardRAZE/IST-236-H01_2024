@@ -1,36 +1,5 @@
 import { createContext, useReducer } from "react";
 
-const DUMMY_ORDERS = [
-  {
-    id: "#0000001",
-    description: " A shirt",
-    total: 32.99,
-    status: "Open",
-    date: new Date("2024-03-13"),
-  },
-  {
-    id: "#0000002",
-    description: " A pair of pants",
-    total: 63.56,
-    status: "Open",
-    date: new Date("2024-02-20"),
-  },
-  {
-    id: "#0000003",
-    description: "A nice hat",
-    total: 42.78,
-    status: "Completed",
-    date: new Date("2024-02-11"),
-  },
-  {
-    id: "#0000004",
-    description: "A pair of earrings",
-    total: 202.78,
-    status: "Completed",
-    date: new Date("2023-12-31"),
-  },
-];
-
 export const OrdersContext = createContext({
   orders: [],
   addOrder: ({ description, date, total }) => {},
@@ -43,7 +12,7 @@ function ordersReducer(state, action) {
   switch (action.type) {
     case "ADD":
       //const id = "#" + Math.floor(Math.random() * 1000000).toString();
-      return [ ...action.payload, ...state];
+      return [action.payload, ...state];
     case "SET":
       const inverted = action.payload.reverse();
       return action.payload;
@@ -66,15 +35,14 @@ function ordersReducer(state, action) {
 }
 
 function OrdersContextProvider({ children }) {
-  const [ordersState, dispatch] = useReducer(ordersReducer, DUMMY_ORDERS);
+  const [ordersState, dispatch] = useReducer(ordersReducer, []);
 
   function addOrder(orderData) {
     dispatch({ type: "ADD", payload: orderData });
   }
   function setOrders(orders) {
-    dispatch({ type: "SET", payload: order });
+    dispatch({ type: "SET", payload: orders });
   }
-
   function deleteOrder(id) {
     dispatch({ type: "DELETE", payload: id });
   }
@@ -85,6 +53,7 @@ function OrdersContextProvider({ children }) {
   const value = {
     orders: ordersState,
     addOrder: addOrder,
+    setOrders: setOrders,
     deleteOrder: deleteOrder,
     updateOrder: updateOrder,
   };

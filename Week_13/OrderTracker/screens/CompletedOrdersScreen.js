@@ -1,15 +1,17 @@
-import { useContext } from "react";
+import { useContext, useEffect, useState } from "react";
 import OrdersOutput from "../components/OrdersOutput/OrdersOutput";
 import { OrdersContext } from "../store/orders-context";
+import { fetchOrders } from "../util/http";
+import LoadingOverlay from "../components/UI/LoadingOverview";
+import ErrorOverlay from "../components/UI/ErrorOverlay";
 
-function AllOrdersScreen() {
+function CompletedOrderScreen() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState();
+
   const ordersCtx = useContext(OrdersContext);
-  const openOrders = OrdersContext;
 
-
-useEffect(() => {
+  useEffect(() => {
     async function getOrders() {
       setIsLoading(true);
       try {
@@ -20,9 +22,13 @@ useEffect(() => {
       }
       setIsLoading(false);
     }
+
     getOrders();
   }, []);
 
+  const completedOrders = ordersCtx.orders.filter((order) => {
+    return order.status === "Completed";
+  });
 
   function errorHandler() {
     setError(null);
@@ -30,17 +36,17 @@ useEffect(() => {
 
   if (isLoading) {
     return <LoadingOverlay />;
-  } else if (error && !isProcessing) {
+  } else if (error && !isLoading) {
     return <ErrorOverlay message={error} onConfirm={errorHandler} />;
   } else {
     return (
       <OrdersOutput
-        summaryName="All Orders Total"
-        orders={ordersCtx.orders}
-        noOrdersText="No Orders Yet"
+        summaryName="Completed Orders Total"
+        orders={completedOrders}
+        noOrdersText="No Completed Orders Yet"
       />
     );
   }
 }
 
-export default AllOrdersScreen;
+export default CompletedOrderScreen;

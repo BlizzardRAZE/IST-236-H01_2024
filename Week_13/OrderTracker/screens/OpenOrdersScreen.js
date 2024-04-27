@@ -1,12 +1,16 @@
+
 import { useContext, useEffect, useState } from "react";
 import OrdersOutput from "../components/OrdersOutput/OrdersOutput";
 import { OrdersContext } from "../store/orders-context";
-import { useSafeAreaFrame } from "react-native-safe-area-context";
 import { fetchOrders } from "../util/http";
+import LoadingOverlay from "../components/UI/LoadingOverview";
+import ErrorOverlay from "../components/UI/ErrorOverlay";
+
 
 function OpenOrdersScreen() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState();
+
   const ordersCtx = useContext(OrdersContext);
 
   useEffect(() => {
@@ -14,12 +18,14 @@ function OpenOrdersScreen() {
       setIsLoading(true);
       try {
         const orders = await fetchOrders();
+        console.log(orders)
         ordersCtx.setOrders(orders);
       } catch (error) {
-        setError("Could not fetch orders!");
+        setError('Could not fetch orders!');
       }
       setIsLoading(false);
     }
+
     getOrders();
   }, []);
 
@@ -33,8 +39,8 @@ function OpenOrdersScreen() {
 
   if (isLoading) {
     return <LoadingOverlay />;
-  } else if (error && !isProcessing) {
-    return <ErrorOverlay message={error} onConfirm={errorHandler} />;
+  } else if (error && !isLoading) {
+    return <ErrorOverlay message={error} onConfirm={errorHandler}/>;
   } else {
     return (
       <OrdersOutput
